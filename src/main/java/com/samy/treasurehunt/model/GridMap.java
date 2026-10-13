@@ -40,4 +40,12 @@ public class GridMap {
             System.out.println();
         }
     }
+
+    public int getSize() {
+        return grid.length;
+    }
+
+    public char getCell(int i, int j) {
+        return grid[i][j];
+    }
 }
