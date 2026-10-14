@@ -3,10 +3,14 @@ package com.samy.treasurehunt.model;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GridMap {
     private final char [][] grid;
+
+    Map<Position, Integer> treasureNumbers = new HashMap<>();
 
     public GridMap(Path filePath) throws IOException {
         List<String> lines = Files.readAllLines(filePath);
@@ -29,6 +33,22 @@ public class GridMap {
             }
         }
 
+        numberTreasures();
+
+    }
+
+    private void numberTreasures() {
+        int treasureNumber = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == '$') {
+                    Position position = new Position(i, j);
+                    treasureNumbers.put(position, treasureNumber);
+                    treasureNumber++;
+                }
+            }
+        }
     }
 
     public void display() {
@@ -90,5 +110,27 @@ public class GridMap {
         throw new IllegalArgumentException(
                 "Unknown cell type: " + cell
         );
+    }
+
+
+    public boolean containsTreasure(Position position) {
+        return isInside(position)
+                && grid[position.row()][position.column()] == '$';
+    }
+
+    public int getTreasureNumber(Position position) {
+        Integer treasureNumber = treasureNumbers.get(position);
+
+        if (treasureNumber == null) {
+            throw new IllegalArgumentException(
+                    "There is no treasure at this position"
+            );
+        }
+
+        return treasureNumber;
+    }
+
+    public int getTreasureCount() {
+        return treasureNumbers.size();
     }
 }
