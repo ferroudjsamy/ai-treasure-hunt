@@ -10,7 +10,7 @@ import java.util.Map;
 public class GridMap {
     private final char [][] grid;
 
-    Map<Position, Integer> treasureNumbers = new HashMap<>();
+    private final Map<Position, Integer> treasureNumbers = new HashMap<>();
 
     public GridMap(Path filePath) throws IOException {
         List<String> lines = Files.readAllLines(filePath);
