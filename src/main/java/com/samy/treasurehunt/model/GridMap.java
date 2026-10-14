@@ -48,4 +48,47 @@ public class GridMap {
     public char getCell(int i, int j) {
         return grid[i][j];
     }
+
+    public boolean isInside(Position position) {
+        return position.row() >= 0
+                && position.row() < grid.length
+                && position.column() >= 0
+                && position.column() < grid.length;
+    }
+
+    public boolean isObstacle(Position position) {
+        if (!isInside(position)) {
+            return false;
+        }
+
+        char cell = grid[position.row()][position.column()];
+
+        return cell == 'W' || cell == 'P';
+    }
+
+    public boolean isAccessible(Position position) {
+        return isInside(position) && !isObstacle(position);
+    }
+
+    public int getMovementCost(Position position) {
+        if (!isAccessible(position)) {
+            throw new IllegalArgumentException(
+                    "Cannot calculate the cost of an inaccessible position"
+            );
+        }
+
+        char cell = grid[position.row()][position.column()];
+
+        if (Character.isDigit(cell)) {
+            return Character.getNumericValue(cell);
+        }
+
+        if (cell == '$') {
+            return 1;
+        }
+
+        throw new IllegalArgumentException(
+                "Unknown cell type: " + cell
+        );
+    }
 }
