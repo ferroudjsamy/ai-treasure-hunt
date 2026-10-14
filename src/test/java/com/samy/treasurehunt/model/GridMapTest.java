@@ -151,5 +151,34 @@ class GridMapTest {
         );
     }
 
+    @Test
+    void shouldNumberTreasures() throws IOException {
+        Path filePath = tempDirectory.resolve("treasure-test-map.txt");
+
+        Files.writeString(filePath, """
+            $2$
+            456
+            $89
+            """);
+
+        GridMap map = new GridMap(filePath);
+
+        assertEquals(3, map.getTreasureCount());
+
+        assertTrue(map.containsTreasure(new Position(0, 0)));
+        assertTrue(map.containsTreasure(new Position(0, 2)));
+        assertTrue(map.containsTreasure(new Position(2, 0)));
+        assertFalse(map.containsTreasure(new Position(1, 1)));
+
+        assertEquals(0, map.getTreasureNumber(new Position(0, 0)));
+        assertEquals(1, map.getTreasureNumber(new Position(0, 2)));
+        assertEquals(2, map.getTreasureNumber(new Position(2, 0)));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> map.getTreasureNumber(new Position(1, 1))
+        );
+    }
+
 
 }
