@@ -71,4 +71,14 @@ public class TreasureHuntProblem {
 
         return successors;
     }
+
+    public boolean isGoal(AgentState state) {
+        return state.areAllTreasuresCollected(
+                map.getTreasureCount()
+        );
+    }
+
+    public int heuristic(AgentState state) {
+        return 0;
+    }
 }
